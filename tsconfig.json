@@ -5,7 +5,11 @@
     "outDir": "./build",
     "rootDir": "./src",
     "strict": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]
