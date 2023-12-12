@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import express from "express";
 import middleware from '../middleware/common'
+import { AppDataSource } from "../config/datasource";
 import { applyMiddleware } from "../middleware";
 import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
@@ -38,6 +39,11 @@ const apolloServer = new ApolloServer({
 
 applyMiddleware(middleware, app);
 
+AppDataSource.initialize()
+  .then(() => {
+    console.log("Database connection successful")
+  })
+  .catch((error) => console.log(error))
 
 const startServer = async () => {
   await apolloServer.start()
