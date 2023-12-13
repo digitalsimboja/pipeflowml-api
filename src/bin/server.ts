@@ -9,6 +9,7 @@ import { ApolloServer } from '@apollo/server';
 import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
 import http from 'http';
+import { router } from "../api/routes";
 
 
 // The GraphQL schema
@@ -38,6 +39,7 @@ const apolloServer = new ApolloServer({
 
 
 applyMiddleware(middleware, app);
+app.use(router)
 
 AppDataSource.initialize()
   .then(() => {
