@@ -11,6 +11,10 @@ import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHt
 import http from 'http';
 import { router } from "../api/routes";
 
+const app = express();
+const httpServer = http.createServer(app);
+const port = parseInt(process.env.PORT || '8443', 10);
+
 
 // The GraphQL schema
 const typeDefs = `#graphql
@@ -26,9 +30,6 @@ const resolvers = {
   },
 };
 
-const app = express();
-const httpServer = http.createServer(app);
-const port = parseInt(process.env.PORT || '8443', 10);
 
 // Set up Apollo Server
 const apolloServer = new ApolloServer({
@@ -41,19 +42,21 @@ const apolloServer = new ApolloServer({
 applyMiddleware(middleware, app);
 app.use(router)
 
-AppDataSource.initialize()
-  .then(() => {
-    console.log("Database connection successful")
-  })
-  .catch((error) => console.log(error))
-
 const startServer = async () => {
-  await apolloServer.start()
-  app.use(expressMiddleware(apolloServer))
-  app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
-    console.log(`GraphQL playground at http://localhost:${port}/graphql`);
-  });
-}
+  try {
+    await AppDataSource.initialize();
+    console.log('Database connection successful');
+    
+    await apolloServer.start();
+    app.use(expressMiddleware(apolloServer));
+
+    app.listen(port, () => {
+      console.log(`Server is running at http://localhost:${port}`);
+      console.log(`GraphQL playground at http://localhost:${port}/graphql`);
+    });
+  } catch (error) {
+    console.error('Error initializing database:', error);
+  }
+};
 
 startServer()
