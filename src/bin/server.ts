@@ -10,43 +10,34 @@ import { expressMiddleware } from '@apollo/server/express4';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
 import http from 'http';
 import { router } from "../api/routes";
+import { buildSchema } from "type-graphql";
+import AuthResolver from "../api/graphql/resolvers/auth";
 
-const app = express();
-const httpServer = http.createServer(app);
-const port = parseInt(process.env.PORT || '8443', 10);
-
-
-// The GraphQL schema
-const typeDefs = `#graphql
-  type Query {
-    hello: String
-  }
-`;
-
-// A map of functions which return data for the schema.
-const resolvers = {
-  Query: {
-    hello: () => 'Hello world',
-  },
-};
-
-
-// Set up Apollo Server
-const apolloServer = new ApolloServer({
-  typeDefs,
-  resolvers,
-  plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-});
-
-
-applyMiddleware(middleware, app);
-app.use(router)
+const getSchema = async () => {
+  return await buildSchema({
+    resolvers: [AuthResolver]
+  })
+}
 
 const startServer = async () => {
+  const app = express();
+  const httpServer = http.createServer(app);
+  const port = parseInt(process.env.PORT || '8443', 10);
+
+  applyMiddleware(middleware, app);
+  app.use(router)
+
+
+  const schema = await getSchema()
+  const apolloServer = new ApolloServer({
+    schema,
+    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+  });
+
   try {
     await AppDataSource.initialize();
     console.log('Database connection successful');
-    
+
     await apolloServer.start();
     app.use(expressMiddleware(apolloServer));
 

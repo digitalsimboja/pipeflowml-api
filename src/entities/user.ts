@@ -1,4 +1,4 @@
-
+import bcrypt from 'bcrypt';
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({ name: 'user' })
@@ -27,3 +27,5 @@ export class User {
     @Column({ type: 'text', nullable: false })
     public phoneNumber: string;
 }
+
+export const hashPassword = (password: string): Promise<string> => bcrypt.hash(password, 10);
