@@ -16,16 +16,7 @@ export class User {
     public email: string;
 
     @Column({ type: 'text', nullable: false })
-    public firstName: string;
-
-    @Column({ type: 'text', nullable: false })
-    public lastName: string;
-
-    @Column({ type: 'text', nullable: false })
     public password: string;
-
-    @Column({ type: 'text', nullable: false })
-    public phoneNumber: string;
 }
 
 export const hashPassword = (password: string): Promise<string> => bcrypt.hash(password, 10);

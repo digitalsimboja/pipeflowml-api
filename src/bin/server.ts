@@ -11,11 +11,12 @@ import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHt
 import http from 'http';
 import { router } from "../api/routes";
 import { buildSchema } from "type-graphql";
-import AuthResolver from "../api/graphql/resolvers/auth";
+// import AuthResolver from "../api/graphql/resolvers/auth";
+import { registeredResolvers } from "../config/registeredResolvers";
 
 const getSchema = async () => {
   return await buildSchema({
-    resolvers: [AuthResolver]
+    resolvers: registeredResolvers
   })
 }
 
