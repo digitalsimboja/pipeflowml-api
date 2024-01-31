@@ -12,12 +12,10 @@ export default class AuthResolver {
     async _signUpNewUser(data: SignUpUserInput) {
         const userRepository = AppDataSource.getRepository(User);
 
-        // Create a new user entity
         const newUser = new User();
         newUser.email = data.email;
         newUser.password = data.password;
 
-        // Save the new user to the database
         const savedUser = await userRepository.save(newUser);
 
         return { user: savedUser };
@@ -27,6 +25,7 @@ export default class AuthResolver {
     hello(): string {
         return "Hello WORLD"
     }
+
     @Mutation(() => SignUpUserResponse)
     async signUp(@Arg("data") data: SignUpUserInput, @Ctx() ctx: Context) {
         data = {
@@ -49,13 +48,14 @@ export default class AuthResolver {
 
             const sessionToken = signUserToken(user);
             console.log(ctx)
-            //ctx.setCookie('userToken', sessionToken)
+            ctx.setCookie('userToken', sessionToken)
 
             return { sessionToken }
 
         } catch (err: any) {
-            const errorMessage = "An issue occured creating Evveland AI account";
-            throw new Error(errorMessage);
+            //TODO: Replace in production. Use loggin service instead
+            //const errorMessage = "An issue occured creating Evveland AI account";
+            throw new Error(err);
         }
 
     }

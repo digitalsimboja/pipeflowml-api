@@ -1,4 +1,5 @@
 import { Field, ID, ObjectType } from "type-graphql";
+import Role from "./role";
 
 @ObjectType()
 export default class User {
@@ -10,4 +11,10 @@ export default class User {
 
     @Field(_ => Date)
     createdAt: Date;
+
+    @Field(_ => Date)
+    updatedAt: Date;
+
+    @Field(_ => Role)
+    role!: Role; 
 }

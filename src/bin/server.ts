@@ -1,6 +1,7 @@
 import "reflect-metadata";
 import dotenv from 'dotenv';
 dotenv.config();
+
 import express from "express";
 import middleware from '../middleware/common'
 import { AppDataSource } from "../config/datasource";
@@ -11,12 +12,13 @@ import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHt
 import http from 'http';
 import { router } from "../api/routes";
 import { buildSchema } from "type-graphql";
-// import AuthResolver from "../api/graphql/resolvers/auth";
+
 import { registeredResolvers } from "../config/registeredResolvers";
 
 const getSchema = async () => {
   return await buildSchema({
-    resolvers: registeredResolvers
+    resolvers: registeredResolvers,
+    emitSchemaFile: './schema.graphql'
   })
 }
 
@@ -51,4 +53,4 @@ const startServer = async () => {
   }
 };
 
-startServer()
+void startServer()

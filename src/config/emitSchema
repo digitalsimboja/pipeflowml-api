@@ -1,0 +1,12 @@
+import { buildSchema } from "type-graphql"
+import { registeredResolvers } from "../config/registeredResolvers"
+
+export const SCHEMA_FILEPATH = 'schema.graphql'
+
+export default (schemaFile?: string) => {
+    return buildSchema({
+        emitSchemaFile: schemaFile || SCHEMA_FILEPATH,
+        resolvers: registeredResolvers,
+        authChecker: () => true
+    })
+}

@@ -6,6 +6,21 @@ export interface Context {
 }
 export interface MaybeAuthorizedContext extends Context {
     isAdmin?: boolean;
-    isEvvelandCrew?:boolean;
+    isEvvelandCrew?: boolean;
     isPartner?: boolean;
+    isUser?: boolean;
+}
+
+export enum AuthorizationRoles {
+    USER = "USER",
+    ADMIN = "ADMIN",
+    EVELAND_CREW = "EVELAND_CREW",
+    PARTNER = "PARTNER"
+}
+
+export interface AuthorizedContext extends Context {
+    isAdmin: boolean;
+    isEvvelandCrew: boolean;
+    isPartner: boolean;
+    isUser: boolean;
 }
