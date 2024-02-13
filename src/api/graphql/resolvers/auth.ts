@@ -23,7 +23,7 @@ export default class AuthResolver {
 
     @Query(_ => String)
     hello(): string {
-        return "Hello WORLD"
+        return "Welcome to Evveland AI agents"
     }
 
     @Mutation(() => SignUpUserResponse)

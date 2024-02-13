@@ -6,51 +6,32 @@ import express from "express";
 import middleware from '../middleware/common'
 import { AppDataSource } from "../config/datasource";
 import { applyMiddleware } from "../middleware";
-import { ApolloServer } from '@apollo/server';
-import { expressMiddleware } from '@apollo/server/express4';
-import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer'
-import http from 'http';
+// import http from 'http';
 import { router } from "../api/routes";
-import { buildSchema } from "type-graphql";
-
-import { registeredResolvers } from "../config/registeredResolvers";
-
-const getSchema = async () => {
-  return await buildSchema({
-    resolvers: registeredResolvers,
-    emitSchemaFile: './schema.graphql'
-  })
-}
+import { initApolloServer } from "../config/apolloServer";
 
 const startServer = async () => {
   const app = express();
-  const httpServer = http.createServer(app);
+  //const httpServer = http.createServer(app);
   const port = parseInt(process.env.PORT || '8443', 10);
 
   applyMiddleware(middleware, app);
-  app.use(router)
-
-
-  const schema = await getSchema()
-  const apolloServer = new ApolloServer({
-    schema,
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-  });
+  app.use(router);
 
   try {
+    // Initialize Apollo Server
+    const apolloServer = await initApolloServer();
+
     await AppDataSource.initialize();
     console.log('Database connection successful');
 
-    await apolloServer.start();
-    app.use(expressMiddleware(apolloServer));
-
-    app.listen(port, () => {
+    apolloServer.listen(port, () => {
       console.log(`Server is running at http://localhost:${port}`);
       console.log(`GraphQL playground at http://localhost:${port}/graphql`);
     });
   } catch (error) {
-    console.error('Error initializing database:', error);
+    console.error('Error initializing server:', error);
   }
 };
 
-void startServer()
+void startServer();
