@@ -58,7 +58,7 @@ export const apolloConfig: Config = {
                 if (!ctx.res) throw new Error('Context does not have response set')
                 const serializedCookie = serialize(key, value, cookieOptions({ httpOnly: true }));
 
-                ctx.res.setHeader('Set-Cookie', serializedCookie);
+                ctx.res.setHeader('userToken', serializedCookie);
             },
             clearCookie: (key: string) => {
                 if (!ctx.res) throw new Error('Context does not have response set');
@@ -69,7 +69,7 @@ export const apolloConfig: Config = {
                 });
 
                 // Set the expired cookie in the response
-                ctx.res.setHeader('Set-Cookie', expiredCookie);
+                ctx.res.setHeader('userToken', expiredCookie);
             }
         }
 

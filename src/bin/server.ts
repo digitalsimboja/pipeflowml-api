@@ -6,13 +6,11 @@ import express from "express";
 import middleware from '../middleware/common'
 import { AppDataSource } from "../config/datasource";
 import { applyMiddleware } from "../middleware";
-// import http from 'http';
 import { router } from "../api/routes";
 import { initApolloServer } from "../config/apolloServer";
 
 const startServer = async () => {
   const app = express();
-  //const httpServer = http.createServer(app);
   const port = parseInt(process.env.PORT || '8443', 10);
 
   applyMiddleware(middleware, app);

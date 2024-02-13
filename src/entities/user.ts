@@ -25,3 +25,5 @@ export class User {
 }
 
 export const hashPassword = (password: string): Promise<string> => bcrypt.hash(password, 10);
+
+export const authenticateUser = (userPassword: string, hash: string): Promise<boolean> => bcrypt.compare(userPassword, hash);

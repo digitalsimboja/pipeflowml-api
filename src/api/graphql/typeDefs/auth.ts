@@ -29,3 +29,4 @@ export class SignInUserResponse {
     @Field()
     sessionToken: string;
 }
+

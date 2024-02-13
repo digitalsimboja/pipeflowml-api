@@ -1,11 +1,44 @@
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
-import { SignUpUserInput, SignUpUserResponse } from "../typeDefs/auth";
-import { User, hashPassword } from "../../../entities/user";
-import { Context } from "../common";
+import { SignInUserInput, SignInUserResponse, SignUpUserInput, SignUpUserResponse } from "../typeDefs/auth";
+import { User, authenticateUser, hashPassword } from "../../../entities/user";
+import { Context, MaybeAuthorizedContext } from "../common";
 import { AppDataSource } from "../../../config/datasource";
 import { signUserToken } from "../../../utils/jwt";
 
 
+const loginUser = async (params: {
+    data: SignInUserInput;
+    ctx: Context
+}) => {
+    const { data, ctx } = params;
+    if (!data.email || !data.password) {
+        throw new Error('User authentication failed')
+    }
+
+    const { email, password } = data;
+
+    const userRepository = AppDataSource.getRepository(User);
+    const user = await userRepository.findOne({
+        where: { email: email },
+    });
+
+    if (!user) {
+        throw new Error("User authentication failed")
+    }
+
+    const isAuthenticated = await authenticateUser(password, user.password)
+
+    if (!isAuthenticated) {
+        throw new Error("Password authentication failed")
+    }
+
+    const sessionToken = signUserToken(user)
+
+    ctx.setCookie('userToken', sessionToken);
+    console.log({ user })
+
+    return { sessionToken }
+}
 @Resolver()
 export default class AuthResolver {
 
@@ -47,7 +80,7 @@ export default class AuthResolver {
             const { user } = await this._signUpNewUser(data)
 
             const sessionToken = signUserToken(user);
-            console.log(ctx)
+
             ctx.setCookie('userToken', sessionToken)
 
             return { sessionToken }
@@ -57,6 +90,20 @@ export default class AuthResolver {
             //const errorMessage = "An issue occured creating Evveland AI account";
             throw new Error(err);
         }
+
+    }
+
+    @Mutation(_ => SignInUserResponse)
+    async signInUser(@Arg('data') data: SignInUserInput, @Ctx() ctx: MaybeAuthorizedContext) {
+        data = {
+            ...data,
+            email: data.email?.toLocaleLowerCase().trim()
+        }
+
+        return loginUser({
+            ctx,
+            data
+        })
 
     }
 

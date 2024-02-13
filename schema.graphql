@@ -4,11 +4,21 @@
 # -----------------------------------------------
 
 type Mutation {
+  signInUser(data: SignInUserInput!): SignInUserResponse!
   signUp(data: SignUpUserInput!): SignUpUserResponse!
 }
 
 type Query {
   hello: String!
+}
+
+input SignInUserInput {
+  email: String!
+  password: String!
+}
+
+type SignInUserResponse {
+  sessionToken: String!
 }
 
 input SignUpUserInput {
