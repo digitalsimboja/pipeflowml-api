@@ -35,7 +35,6 @@ const loginUser = async (params: {
     const sessionToken = signUserToken(user)
 
     ctx.setCookie('userToken', sessionToken);
-    console.log({ user })
 
     return { sessionToken }
 }

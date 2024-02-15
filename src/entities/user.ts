@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Role } from './role';
+import { Company } from './company';
 
 @Entity({ name: 'user' })
 export class User {
@@ -22,6 +23,11 @@ export class User {
     @ManyToOne(() => Role, {eager: true})
     @JoinColumn({ name: 'roleId'})
     role: Role;
+
+    @OneToMany(() => Company, company => company.user)
+    businessProfile: Company[];
+
+
 }
 
 export const hashPassword = (password: string): Promise<string> => bcrypt.hash(password, 10);
