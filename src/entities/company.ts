@@ -1,24 +1,36 @@
-import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 import { User } from "./user";
 import { Preference } from "./preference";
 import { Match } from "./match";
+import DefaultEntity from "./defaultEntity";
 
+export enum CompanySize {
+    SMALL = "small",
+    MEDIUM = "medium",
+    LARGE = "large"
+}
+
+
+export interface CompnayProps {
+    name: string;
+    industry?: string | null;
+    size: CompanySize
+    location?: string| null;
+}
 @Entity({ name: 'company' })
-export class Company {
-    @PrimaryGeneratedColumn('uuid')
-    public readonly id: string;
+export class Company extends  DefaultEntity {
 
-    @Column()
+    @Column({ type: 'text', nullable: false})
     name: string;
 
-    @Column()
-    industry: string;
+    @Column({ type: 'text', nullable: true})
+    industry?: string | null;
 
-    @Column()
-    size: string;
+    @Column({ type: 'enum', enum: CompanySize, default: CompanySize.SMALL, nullable: false})
+    size: CompanySize;
 
-    @Column()
-    location: string;
+    @Column({ type: 'text', nullable: true})
+    location?: string | null;
 
     // Relationships
     @ManyToOne(() => User, user => user.businessProfile)
@@ -32,4 +44,14 @@ export class Company {
 
     @OneToMany(() => Match, match => match.secondBusiness)
     matchesAsSecondBuisness: Match[];
+
+    constructor(attr?: CompnayProps) {
+        super()
+        if(attr) {
+            this.name = attr.name;
+            this.industry = attr.industry;
+            this.location = attr.location;
+            this.size = attr.size;
+        }
+    }
 }

@@ -1,24 +1,23 @@
 import bcrypt from 'bcrypt';
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 import { Role } from './role';
 import { Company } from './company';
+import DefaultEntity from './defaultEntity';
 
+
+export interface UserProps {
+    email: string;
+    password: string;
+
+}
 @Entity({ name: 'user' })
-export class User {
-    @PrimaryGeneratedColumn('uuid')
-    public readonly id: string;
+export class User extends DefaultEntity {
     
     @Column({ type: 'text', nullable: false })
     public email: string;
 
     @Column({ type: 'text', nullable: false })
     public password: string;
-
-    @CreateDateColumn({ type: 'timestamp with time zone', nullable: false})
-    public readonly createdAt: Date
-
-    @UpdateDateColumn({ type: 'timestamp with time zone', nullable: false})
-    public readonly updatedAt: Date;
     
     @ManyToOne(() => Role, {eager: true})
     @JoinColumn({ name: 'roleId'})
@@ -26,6 +25,14 @@ export class User {
 
     @OneToMany(() => Company, company => company.user)
     businessProfile: Company[];
+
+    constructor(data?: UserProps) {
+        super()
+        if (data) {
+            this.email = data.email.trim()
+            this.password = data.password
+        }
+    }
 
 
 }

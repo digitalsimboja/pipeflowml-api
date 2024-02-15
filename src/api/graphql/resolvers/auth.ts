@@ -44,9 +44,7 @@ export default class AuthResolver {
     async _signUpNewUser(data: SignUpUserInput) {
         const userRepository = AppDataSource.getRepository(User);
 
-        const newUser = new User();
-        newUser.email = data.email;
-        newUser.password = data.password;
+        const newUser = new User({...data, email: data.email, password: data.password});
 
         const savedUser = await userRepository.save(newUser);
 
