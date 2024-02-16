@@ -38,7 +38,7 @@ export const AppDataSource = new DataSource({
   username: credentials.username,
   password: credentials.password,
   database: credentials.database!,
-  synchronize: false,
+  synchronize: true,
   logging: true,
   entities: registeredEntities,
   subscribers: ["subscriber/*.ts"],

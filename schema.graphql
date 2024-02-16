@@ -3,9 +3,38 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+type Company {
+  id: ID!
+  industry: String!
+  location: String!
+  name: String!
+  size: String!
+}
+
+type CompanyMutationResponse {
+  company: Company
+  message: String
+  success: Boolean!
+}
+
+"""The size of the company"""
+enum CompanySize {
+  LARGE
+  MEDIUM
+  SMALL
+}
+
 type Mutation {
+  createCompany(data: PartialCompanyInput!): CompanyMutationResponse!
   signInUser(data: SignInUserInput!): SignInUserResponse!
   signUp(data: SignUpUserInput!): SignUpUserResponse!
+}
+
+input PartialCompanyInput {
+  industry: String!
+  location: String!
+  name: String!
+  size: CompanySize!
 }
 
 type Query {

@@ -13,9 +13,9 @@ export enum CompanySize {
 
 export interface CompnayProps {
     name: string;
-    industry?: string | null;
+    industry: string ;
     size: CompanySize
-    location?: string| null;
+    location: string;
 }
 @Entity({ name: 'company' })
 export class Company extends  DefaultEntity {
@@ -23,14 +23,14 @@ export class Company extends  DefaultEntity {
     @Column({ type: 'text', nullable: false})
     name: string;
 
-    @Column({ type: 'text', nullable: true})
-    industry?: string | null;
+    @Column({ type: 'text', nullable: false})
+    industry: string;
 
     @Column({ type: 'enum', enum: CompanySize, default: CompanySize.SMALL, nullable: false})
     size: CompanySize;
 
-    @Column({ type: 'text', nullable: true})
-    location?: string | null;
+    @Column({ type: 'text', nullable: false})
+    location: string;
 
     // Relationships
     @ManyToOne(() => User, user => user.businessProfile)
