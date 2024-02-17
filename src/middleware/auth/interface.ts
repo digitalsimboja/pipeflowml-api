@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { User } from "src/entities/user";
+import { User } from "../../entities/user";
 
 
 export type Wrapper = (router: Router) => void;

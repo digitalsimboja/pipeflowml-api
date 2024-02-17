@@ -45,7 +45,8 @@ export const apolloConfig: Config = {
             auth = ctx.req.signedCookies;
         }
         if (ctx.req?.headers?.authorization) {
-            auth.userToken = ctx.req.headers.authorization.split('Bearer ')[1];
+            const bearer = ctx.req.headers.authorization
+            auth.userToken = bearer
         }
 
         let context: Partial<AuthorizedContext> = {
@@ -76,7 +77,8 @@ export const apolloConfig: Config = {
         try {
             if (auth.userToken) {
                 let userId;
-                const decoded = verify(auth.userToken, JWT_KEY, { ignoreExpiration: true, }) as AuthorizedJWT;
+                const token = auth.userToken as string;
+                const decoded = verify(token, JWT_KEY, { ignoreExpiration: true, }) as AuthorizedJWT;
                 userId = decoded.user.id
                 context.userId = userId;
             }
@@ -84,9 +86,6 @@ export const apolloConfig: Config = {
         } catch (err) {
             console.error(`Error in setting up Apollo Context`, err);
         }
-
-
-
         return context;
     }
 }
