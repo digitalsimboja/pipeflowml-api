@@ -1,8 +1,9 @@
 import { Field, ID, ObjectType } from "type-graphql";
 import Role from "./role";
+import Company from "./company";
 
 @ObjectType()
-export default class User {
+export  class User {
     @Field(_type => ID)
     id: string;
 
@@ -17,4 +18,26 @@ export default class User {
 
     @Field(_ => Role)
     role!: Role; 
+}
+
+@ObjectType()
+export class UserQueryResponse {
+    @Field(_type => ID)
+    id: string;
+
+    @Field()
+    email: string;
+
+    @Field(_ => Role)
+    role!: Role; 
+
+}
+
+@ObjectType()
+export class UserCompayQueryResponse {
+    @Field(_type => ID)
+    id: string;
+
+    @Field(_ => [Company], {nullable: true})
+    companies?: Company[]
 }

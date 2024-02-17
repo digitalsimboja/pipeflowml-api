@@ -34,6 +34,9 @@ export default class CompanyResolver {
             company.user = user;
             await companyRepository.save(company)
 
+            user.businessProfile = [...(user.businessProfile || []), company]
+            await userRepository.save(user)
+            
             return {
                 success: true,
                 message: "Company created successfully",

@@ -32,6 +32,6 @@
     "scripts"
   ],
   "include": [
-    "src/**/*"
+    "./src/**/*"
   ]
 }
