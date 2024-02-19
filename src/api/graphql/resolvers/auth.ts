@@ -75,6 +75,7 @@ export default class AuthResolver {
             }
 
             const { user } = await this._signUpNewUser(data)
+            await user.reload()
 
             const sessionToken = signUserToken(user);
 

@@ -3,7 +3,7 @@ import Role from "./role";
 import Company from "./company";
 
 @ObjectType()
-export  class User {
+export class User {
     @Field(_type => ID)
     id: string;
 
@@ -17,7 +17,7 @@ export  class User {
     updatedAt: Date;
 
     @Field(_ => Role)
-    role!: Role; 
+    role!: Role;
 }
 
 @ObjectType()
@@ -29,7 +29,7 @@ export class UserQueryResponse {
     email: string;
 
     @Field(_ => Role)
-    role!: Role; 
+    role!: Role;
 
 }
 
@@ -38,6 +38,6 @@ export class UserCompayQueryResponse {
     @Field(_type => ID)
     id: string;
 
-    @Field(_ => [Company], {nullable: true})
+    @Field(_ => [Company], { nullable: true })
     companies?: Company[]
 }

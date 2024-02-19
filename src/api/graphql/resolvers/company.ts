@@ -1,12 +1,24 @@
-import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
+import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { CompanyMutationResponse, PartialCompanyInput } from "../typeDefs/company";
-import { Context } from "../common";
+import { AuthorizedContext, Context } from "../common";
 import { AppDataSource } from "../../../config/datasource";
-import { User } from "../../../entities/user";
+import { User, safeFindUserOrFail } from "../../../entities/user";
 import { Company } from "../../../entities/company";
+import { UserCompayQueryResponse } from "../typeDefs/user";
+
 
 @Resolver()
 export default class CompanyResolver {
+    @Query(() => UserCompayQueryResponse)
+    async getUserCompany(@Arg("id") id: string, @Ctx() ctx: AuthorizedContext) {
+        const user = await safeFindUserOrFail(id, ctx, ["businessProfile"])
+
+        return {
+            id: user.id,
+            companies: user.businessProfile
+        }
+    }
+
     @Mutation(() => CompanyMutationResponse)
     async createCompany(@Arg("data") data: PartialCompanyInput, @Ctx() ctx: Context) {
         try {
@@ -36,7 +48,7 @@ export default class CompanyResolver {
 
             user.businessProfile = [...(user.businessProfile || []), company]
             await userRepository.save(user)
-            
+
             return {
                 success: true,
                 message: "Company created successfully",

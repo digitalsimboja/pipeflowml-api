@@ -1,6 +1,6 @@
 import { Arg, Ctx, Query, Resolver } from "type-graphql";
 import { AuthorizedContext } from "../common";
-import { UserCompayQueryResponse, UserQueryResponse } from "../typeDefs/user";
+import {  UserQueryResponse } from "../typeDefs/user";
 import { AppDataSource } from "../../../config/datasource";
 import { User } from "../../../entities/user";
 
@@ -27,26 +27,4 @@ export default class UserResolver {
         }
     }
 
-    @Query(() => UserCompayQueryResponse)
-    async getUserCompany(@Arg("id") id: string, @Ctx() ctx: AuthorizedContext) {
-        const userId = ctx.userId;
-        if (userId !== id) {
-            throw new Error("Not authorized");
-        }
-        const userRepository = AppDataSource.getRepository(User)
-        const user = await userRepository.findOne({
-            where: { id: userId },
-            relations: ["businessProfile"]
-        })
-        if (!user) {
-            throw new Error("User not found")
-        }
-
-        console.log(user.businessProfile)
-        
-        return {
-            id: user.id,
-            companies: user.businessProfile
-        }
-    }
 }

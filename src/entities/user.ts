@@ -3,6 +3,8 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
 import { Role } from './role';
 import { Company } from './company';
 import DefaultEntity from './defaultEntity';
+import { Context } from '../api/graphql/common';
+import { AppDataSource } from '../config/datasource';
 
 
 export interface UserProps {
@@ -12,15 +14,15 @@ export interface UserProps {
 }
 @Entity({ name: 'user' })
 export class User extends DefaultEntity {
-    
+
     @Column({ type: 'text', nullable: false })
     public email: string;
 
     @Column({ type: 'text', nullable: false })
     public password: string;
-    
-    @ManyToOne(() => Role, {eager: true})
-    @JoinColumn({ name: 'roleId'})
+
+    @ManyToOne(() => Role, { eager: true })
+    @JoinColumn({ name: 'roleId' })
     role: Role;
 
     @OneToMany(() => Company, company => company.user)
@@ -34,6 +36,23 @@ export class User extends DefaultEntity {
         }
     }
 
+
+}
+
+export const safeFindUserOrFail = async (id: string, ctx: Context, relations?: string[]): Promise<User> => {
+    const userId = ctx.userId;
+    if (userId !== id) {
+        throw new Error("Not authorized");
+    }
+    const userRepository = AppDataSource.getRepository(User)
+    const user = await userRepository.findOne({
+        where: { id: userId },
+        relations: relations
+    })
+    if (!user) {
+        throw new Error("User not found")
+    }
+    return user
 
 }
 
