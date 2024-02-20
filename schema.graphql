@@ -30,6 +30,7 @@ A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `dat
 scalar DateTimeISO
 
 type Mutation {
+  allocatePreferenceToCompany(companyId: String!, preferences: [PreferenceInput!]!): CompanyMutationResponse!
   createCompany(data: PartialCompanyInput!): CompanyMutationResponse!
   signInUser(data: SignInUserInput!): SignInUserResponse!
   signUp(data: SignUpUserInput!): SignUpUserResponse!
@@ -40,6 +41,12 @@ input PartialCompanyInput {
   location: String!
   name: String!
   size: CompanySize!
+}
+
+input PreferenceInput {
+  geographicPreferences: String!
+  preferredBusinessSize: CompanySize!
+  preferredIndustry: String!
 }
 
 type Query {

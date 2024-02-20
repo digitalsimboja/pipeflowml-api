@@ -3,6 +3,7 @@ import { User } from "./user";
 import { Preference } from "./preference";
 import { Match } from "./match";
 import DefaultEntity from "./defaultEntity";
+import { AppDataSource } from "../config/datasource";
 
 export enum CompanySize {
     SMALL = "small",
@@ -54,4 +55,17 @@ export class Company extends  DefaultEntity {
             this.size = attr.size;
         }
     }
+}
+
+export const safeGetCompanyByIdOrFail = async (companyId: string): Promise<Company> => {
+    const companyRepository = AppDataSource.getRepository(Company)
+    const company = await companyRepository.findOne({
+        where: {id: companyId}
+    })
+
+    if (!companyId) {
+        throw new Error(`Company with ID ${companyId} not found`);
+    }
+    return company!;
+
 }

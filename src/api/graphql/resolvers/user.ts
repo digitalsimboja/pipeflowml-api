@@ -1,8 +1,8 @@
 import { Arg, Ctx, Query, Resolver } from "type-graphql";
 import { AuthorizedContext } from "../common";
-import {  UserQueryResponse } from "../typeDefs/user";
+import {  UserCompayQueryResponse, UserQueryResponse } from "../typeDefs/user";
 import { AppDataSource } from "../../../config/datasource";
-import { User } from "../../../entities/user";
+import { User, safeFindUserOrFail } from "../../../entities/user";
 
 @Resolver()
 export default class UserResolver {
@@ -26,5 +26,16 @@ export default class UserResolver {
             role: user.role
         }
     }
+
+    @Query(() => UserCompayQueryResponse)
+    async getUserCompany(@Arg("id") id: string, @Ctx() ctx: AuthorizedContext) {
+        const user = await safeFindUserOrFail(id, ctx, ["businessProfile"])
+
+        return {
+            id: user.id,
+            companies: user.businessProfile
+        }
+    }
+
 
 }
