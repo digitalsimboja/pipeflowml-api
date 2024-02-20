@@ -14,23 +14,23 @@ export enum CompanySize {
 
 export interface CompnayProps {
     name: string;
-    industry: string ;
+    industry: string;
     size: CompanySize
     location: string;
 }
 @Entity({ name: 'company' })
-export class Company extends  DefaultEntity {
+export class Company extends DefaultEntity {
 
-    @Column({ type: 'text', nullable: false})
+    @Column({ type: 'text', nullable: false })
     name: string;
 
-    @Column({ type: 'text', nullable: false})
+    @Column({ type: 'text', nullable: false })
     industry: string;
 
-    @Column({ type: 'enum', enum: CompanySize, default: CompanySize.SMALL, nullable: false})
+    @Column({ type: 'enum', enum: CompanySize, default: CompanySize.SMALL, nullable: false })
     size: CompanySize;
 
-    @Column({ type: 'text', nullable: false})
+    @Column({ type: 'text', nullable: false })
     location: string;
 
     // Relationships
@@ -48,7 +48,7 @@ export class Company extends  DefaultEntity {
 
     constructor(attr?: CompnayProps) {
         super()
-        if(attr) {
+        if (attr) {
             this.name = attr.name;
             this.industry = attr.industry;
             this.location = attr.location;
@@ -57,10 +57,11 @@ export class Company extends  DefaultEntity {
     }
 }
 
-export const safeGetCompanyByIdOrFail = async (companyId: string): Promise<Company> => {
+export const safeGetCompanyByIdOrFail = async (companyId: string, relations?: string[]): Promise<Company> => {
     const companyRepository = AppDataSource.getRepository(Company)
     const company = await companyRepository.findOne({
-        where: {id: companyId}
+        where: { id: companyId },
+        relations: relations
     })
 
     if (!companyId) {

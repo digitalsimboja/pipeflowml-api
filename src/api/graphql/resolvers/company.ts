@@ -71,7 +71,7 @@ export default class CompanyResolver {
                 throw new Error("Authentication required to allocate preferences to company.");
             }
             const user = await safeFindUserOrFail(ctx.userId, ctx, []);
-            const company = await safeGetCompanyByIdOrFail(companyId);
+            const company = await safeGetCompanyByIdOrFail(companyId, ["user"]);
 
 
             if (!user || !company) {
@@ -98,6 +98,8 @@ export default class CompanyResolver {
 
             await preferenceRepository.save(preferenceEntities)
 
+            company.preferences = company.preferences || [];
+
             company.preferences = [...company.preferences, ...preferenceEntities]
 
             await companyRepository.save(company)
@@ -108,7 +110,6 @@ export default class CompanyResolver {
                 company: company
             }
         } catch (error) {
-            console.log(`Error in resolver ${error}`);
             return {
                 success: false,
                 message: `Failed to allocate preference to  the company with id ${companyId}`,
