@@ -1,5 +1,12 @@
 import { BaseEntity, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
+
+export enum SubscriptionStatus {
+  ACTIVE = "active",
+  INACTIVE = "inactive",
+  DISABLED = "disabled"
+}
+
 export default abstract class DefaultEntity extends BaseEntity {
     @PrimaryGeneratedColumn('uuid')
     public readonly id: string;

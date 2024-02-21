@@ -5,6 +5,7 @@ import { Company } from './company';
 import DefaultEntity from './defaultEntity';
 import { Context } from '../api/graphql/common';
 import { AppDataSource } from '../config/datasource';
+import { UserAgentDeployment } from './userAgentDeployment';
 
 
 export interface UserProps {
@@ -27,6 +28,10 @@ export class User extends DefaultEntity {
 
     @OneToMany(() => Company, company => company.user)
     businessProfile: Company[];
+
+    // List of agents deployed by the user
+    @OneToMany(() => UserAgentDeployment, deployment => deployment.user)
+    agentDeployments: UserAgentDeployment[];
 
     constructor(data?: UserProps) {
         super()
