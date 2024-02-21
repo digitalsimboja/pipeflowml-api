@@ -12,7 +12,7 @@ export interface MaybeAuthorizedContext extends Context {
 }
 
 export enum AuthorizationRoles {
-    USER = "USER",
+    DEFAULT = "USER",
     ADMIN = "ADMIN",
     EVELAND_CREW = "EVELAND_CREW",
     PARTNER = "PARTNER"

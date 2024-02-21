@@ -3,6 +3,14 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+"""Authorization roles"""
+enum AuthorizationRoles {
+  ADMIN
+  DEFAULT
+  EVELAND_CREW
+  PARTNER
+}
+
 type Company {
   id: ID!
   industry: String!
@@ -32,6 +40,7 @@ scalar DateTimeISO
 type Mutation {
   allocatePreferenceToCompany(companyId: String!, preferences: [PreferenceInput!]!): CompanyMutationResponse!
   createCompany(data: PartialCompanyInput!): CompanyMutationResponse!
+  createRole(data: RoleInput!): Role!
   signInUser(data: SignInUserInput!): SignInUserResponse!
   signUp(data: SignUpUserInput!): SignUpUserResponse!
 }
@@ -57,8 +66,12 @@ type Query {
 
 type Role {
   id: ID!
-  name: String!
+  name: AuthorizationRoles!
   users: [User!]
+}
+
+input RoleInput {
+  name: AuthorizationRoles!
 }
 
 input SignInUserInput {

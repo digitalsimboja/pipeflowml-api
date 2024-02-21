@@ -22,7 +22,7 @@ export class User extends DefaultEntity {
     @Column({ type: 'text', nullable: false })
     public password: string;
 
-    @ManyToOne(() => Role, { eager: true })
+    @ManyToOne(() => Role,  { eager: true })
     @JoinColumn({ name: 'roleId' })
     role: Role;
 
@@ -38,6 +38,7 @@ export class User extends DefaultEntity {
         if (data) {
             this.email = data.email.trim()
             this.password = data.password
+            
         }
     }
 

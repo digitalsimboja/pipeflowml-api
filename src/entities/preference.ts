@@ -5,22 +5,19 @@ import { User } from "./user";
 
 @Entity({ name: "preference" })
 export class Preference extends DefaultEntity {
-    @Column()
+    @Column({nullable: true  })
     preferredIndustry: string;
 
-    @Column()
+    @Column({nullable: true  })
     preferredBusinessSize: string;
 
-    @Column()
+    @Column({nullable: true  })
     geographicPreferences: string;
 
-    @Column('simple-array')
-    preferredAgentDomains: string[];
-
-    @Column()
+    @Column({nullable: true  })
     subscriptionPlans: string;
 
-    @Column()
+    @Column({nullable: true  })
     preferredLanguage: string;
 
     @OneToOne(() => User)
