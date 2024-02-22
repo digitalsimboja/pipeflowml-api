@@ -37,11 +37,11 @@ export class AIAgent extends DefaultEntity {
     welcomeMessage?: string
 
     // The work period of the Agent. The agent wakes up after this timeout
-    @Column({ nullable: true })
+    @Column({ nullable: true, type: 'timestamp' })
     timeout: Date;
 
     @Column({ nullable: true })
-    preTrainedData?: string;
+    preTrainedDataURL?: string;
 
     @Column({ nullable: true })
     pricing?: string;

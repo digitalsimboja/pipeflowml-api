@@ -1,30 +1,40 @@
 import { AIAgentDomain } from "../../../entities/agent";
 import { Field, ID, InputType, ObjectType, registerEnumType } from "type-graphql";
 
+// Register the enum type
 registerEnumType(AIAgentDomain, {
     name: "AIAgentDomain",
     description: "The domain of the AI Agent"
-})
+});
 
 @InputType()
-export class createAIAgentInput {
+export class CreateAIAgentInput {
     @Field()
     name: string;
 
     @Field()
     description: string;
 
-    @Field(() => AIAgentDomain)
-    domain: AIAgentDomain
-
     @Field()
-    features: string;
+    model: string;
 
-    // Path to uploaded file for pre-trained data
+    @Field(() => AIAgentDomain)
+    domain: AIAgentDomain;
+
+    // Optional fields
+    @Field(() => String, {nullable: true})
+    instruction?: string
+
+    @Field(() => String, {nullable: true})
+    welcomeMessage?: string;
+
+    @Field(() => Date, { nullable: true }) 
+    timeout?: Date;
+
     @Field({ nullable: true }) 
-    preTrainedData?: string;
+    preTrainedDataURL?: string;
 
-    @Field({nullable: true})
+    @Field({ nullable: true }) 
     pricing?: string;
 }
 
@@ -40,16 +50,21 @@ export class AIAgentResponse {
     description: string;
 
     @Field(() => AIAgentDomain)
-    domain: AIAgentDomain
+    domain: AIAgentDomain;
 
-    @Field()
-    features: string;
-
-    // Path to uploaded file for pre-trained data
     @Field({ nullable: true }) 
-    preTrainedData?: string;
+    instruction?: string;
 
-    @Field({nullable: true})
+    @Field({ nullable: true }) 
+    welcomeMessage?: string;
+
+    @Field({ nullable: true }) 
+    timeout?: Date;
+
+    @Field({ nullable: true }) 
+    preTrainedDataURL?: string;
+
+    @Field({ nullable: true }) 
     pricing?: string;
 
     @Field()
