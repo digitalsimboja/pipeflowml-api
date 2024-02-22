@@ -1,5 +1,4 @@
 import { Field, ID, ObjectType } from "type-graphql";
-import Role from "./role";
 import Company from "./company";
 
 @ObjectType()
@@ -15,9 +14,6 @@ export class User {
 
     @Field(_ => Date)
     updatedAt: Date;
-
-    @Field(_ => Role)
-    role!: Role;
 }
 
 @ObjectType()
@@ -27,9 +23,6 @@ export class UserQueryResponse {
 
     @Field()
     email: string;
-
-    @Field(_ => Role)
-    role!: Role;
 
 }
 

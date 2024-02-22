@@ -1,6 +1,6 @@
 import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
 import { CompanyMutationResponse, PartialCompanyInput } from "../typeDefs/company";
-import { Context } from "../common";
+import { AuthorizedContext, Context } from "../common";
 import { AppDataSource } from "../../../config/datasource";
 import { User, safeFindUserOrFail } from "../../../entities/user";
 import { Company, safeGetCompanyByIdOrFail } from "../../../entities/company";
@@ -12,7 +12,7 @@ import { Preference } from "../../../entities/preference";
 export default class CompanyResolver {
 
     @Mutation(() => CompanyMutationResponse)
-    async createCompany(@Arg("data") data: PartialCompanyInput, @Ctx() ctx: Context) {
+    async createCompany(@Arg("data") data: PartialCompanyInput, @Ctx() ctx: AuthorizedContext) {
         try {
             const userId = ctx.userId;
             const userRepository = AppDataSource.getRepository(User)
@@ -55,8 +55,6 @@ export default class CompanyResolver {
                 company: null
             }
         }
-
-
     }
 
     @Mutation(() => CompanyMutationResponse)
@@ -65,7 +63,6 @@ export default class CompanyResolver {
         @Arg("preferences", () => [PreferenceInput]) preferences: PreferenceInput[],
         @Ctx() ctx: Context
     ) {
-
         try {
             if (!ctx.userId) {
                 throw new Error("Authentication required to allocate preferences to company.");
@@ -93,13 +90,11 @@ export default class CompanyResolver {
                 preference.businessProfile = company;
 
                 return preference;
-
             })
 
             await preferenceRepository.save(preferenceEntities)
 
             company.preferences = company.preferences || [];
-
             company.preferences = [...company.preferences, ...preferenceEntities]
 
             await companyRepository.save(company)

@@ -1,6 +1,7 @@
 import { Column, Entity, OneToMany } from "typeorm";
 import DefaultEntity from "./defaultEntity";
 import { UserAgentDeployment } from "./userAgentDeployment";
+import Tools from "./tools";
 
 export enum AIAgentDomain {
     SALES = "Sales",
@@ -22,17 +23,35 @@ export class AIAgent extends DefaultEntity {
     @Column()
     description: string;
 
+    @Column()
+    model: string;
+
     @Column({ type: 'enum', enum: AIAgentDomain, nullable: false })
     domain: AIAgentDomain
 
-    @Column()
-    features: string;
+    // Prompt instruction: e.g You are a helpful, respectful and honest assistant. If you don't know the answer to a question, please don't share false information.
+    @Column({ nullable: true, type: 'text' })
+    instruction?: string;
 
-    @Column()
-    preTrainedData: string;
+    @Column({ nullable: true, type: 'text' })
+    welcomeMessage?: string
 
-    @Column()
-    pricing: string;
+    // The work period of the Agent. The agent wakes up after this timeout
+    @Column({ nullable: true })
+    timeout: Date;
+
+    @Column({ nullable: true })
+    preTrainedData?: string;
+
+    @Column({ nullable: true })
+    pricing?: string;
+
+    @Column({ type: 'text' })
+    embed: string;
+
+    // Integrated tools
+    @OneToMany(() => Tools, tool => tool.agent)
+    tools: Tools[];
 
     @OneToMany(() => UserAgentDeployment, deployment => deployment.agent)
     userDeployments: UserAgentDeployment[];

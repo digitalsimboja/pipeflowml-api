@@ -1,6 +1,6 @@
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { SignInUserInput, SignInUserResponse, SignUpUserInput, SignUpUserResponse } from "../typeDefs/auth";
-import { User, authenticateUser, hashPassword } from "../../../entities/user";
+import { User as DBUser, authenticateUser, hashPassword } from "../../../entities/user";
 import { Context, MaybeAuthorizedContext } from "../common";
 import { AppDataSource } from "../../../config/datasource";
 import { signUserToken } from "../../../utils/jwt";
@@ -17,7 +17,7 @@ const loginUser = async (params: {
 
     const { email, password } = data;
 
-    const userRepository = AppDataSource.getRepository(User);
+    const userRepository = AppDataSource.getRepository(DBUser);
     const user = await userRepository.findOne({
         where: { email: email },
     });
@@ -42,9 +42,11 @@ const loginUser = async (params: {
 export default class AuthResolver {
 
     async _signUpNewUser(data: SignUpUserInput) {
-        const userRepository = AppDataSource.getRepository(User);
+        
+       
+        const userRepository = AppDataSource.getRepository(DBUser);
 
-        const newUser = new User({...data, email: data.email, password: data.password});
+        const newUser = new DBUser({ ...data, email: data.email, password: data.password });
 
         const savedUser = await userRepository.save(newUser);
 
@@ -65,7 +67,7 @@ export default class AuthResolver {
         }
         try {
             // Check if user with email already exists
-            const userRepository = AppDataSource.getRepository(User);
+            const userRepository = AppDataSource.getRepository(DBUser);
             const existingUser = await userRepository.findOne({
                 where: { email: data.email }
             });

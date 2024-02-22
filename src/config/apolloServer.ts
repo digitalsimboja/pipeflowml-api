@@ -15,7 +15,7 @@ export async function getSchema() {
         authChecker: (args, roles) => {
             // If no roles are supplied, then this assumes we are requesting for user auth
             const authRoles: AuthorizationRoles[] = roles.length > 0 ? roles : [AuthorizationRoles.DEFAULT]
-
+            
             if (authRoles.some(r => r === AuthorizationRoles.ADMIN) && args.context.isAdmin) {
                 return true;
             }

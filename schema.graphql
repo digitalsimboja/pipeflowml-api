@@ -3,12 +3,28 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
-"""Authorization roles"""
-enum AuthorizationRoles {
-  ADMIN
-  DEFAULT
-  EVELAND_CREW
-  PARTNER
+"""The domain of the AI Agent"""
+enum AIAgentDomain {
+  CUSTOMERSERVICE
+  FINANCIAL
+  HEALTHCARE
+  HR
+  LEGAL
+  MARKETING
+  REAL_ESTATE
+  SALES
+  TECHNICAL_SUPPORT
+}
+
+type AIAgentResponse {
+  description: String!
+  domain: AIAgentDomain!
+  embed: String!
+  features: String!
+  id: ID!
+  name: String!
+  preTrainedData: String
+  pricing: String
 }
 
 type Company {
@@ -32,15 +48,10 @@ enum CompanySize {
   SMALL
 }
 
-"""
-A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format.
-"""
-scalar DateTimeISO
-
 type Mutation {
   allocatePreferenceToCompany(companyId: String!, preferences: [PreferenceInput!]!): CompanyMutationResponse!
+  createAgentDeployment(data: createAIAgentInput!): AIAgentResponse!
   createCompany(data: PartialCompanyInput!): CompanyMutationResponse!
-  createRole(data: RoleInput!): Role!
   signInUser(data: SignInUserInput!): SignInUserResponse!
   signUp(data: SignUpUserInput!): SignUpUserResponse!
 }
@@ -64,16 +75,6 @@ type Query {
   hello: String!
 }
 
-type Role {
-  id: ID!
-  name: AuthorizationRoles!
-  users: [User!]
-}
-
-input RoleInput {
-  name: AuthorizationRoles!
-}
-
 input SignInUserInput {
   email: String!
   password: String!
@@ -92,14 +93,6 @@ type SignUpUserResponse {
   sessionToken: String!
 }
 
-type User {
-  createdAt: DateTimeISO!
-  email: String!
-  id: ID!
-  role: Role!
-  updatedAt: DateTimeISO!
-}
-
 type UserCompayQueryResponse {
   companies: [Company!]
   id: ID!
@@ -108,5 +101,13 @@ type UserCompayQueryResponse {
 type UserQueryResponse {
   email: String!
   id: ID!
-  role: Role!
+}
+
+input createAIAgentInput {
+  description: String!
+  domain: AIAgentDomain!
+  features: String!
+  name: String!
+  preTrainedData: String
+  pricing: String
 }

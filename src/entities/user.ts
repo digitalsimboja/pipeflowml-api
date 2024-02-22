@@ -1,6 +1,5 @@
 import bcrypt from 'bcrypt';
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from "typeorm";
-import { Role } from './role';
+import { Column, Entity, OneToMany } from "typeorm";
 import { Company } from './company';
 import DefaultEntity from './defaultEntity';
 import { Context } from '../api/graphql/common';
@@ -22,10 +21,6 @@ export class User extends DefaultEntity {
     @Column({ type: 'text', nullable: false })
     public password: string;
 
-    @ManyToOne(() => Role,  { eager: true })
-    @JoinColumn({ name: 'roleId' })
-    role: Role;
-
     @OneToMany(() => Company, company => company.user)
     businessProfile: Company[];
 
@@ -38,10 +33,9 @@ export class User extends DefaultEntity {
         if (data) {
             this.email = data.email.trim()
             this.password = data.password
-            
+
         }
     }
-
 
 }
 

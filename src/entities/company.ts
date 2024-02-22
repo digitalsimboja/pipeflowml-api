@@ -33,7 +33,7 @@ export class Company extends DefaultEntity {
     @Column({ type: 'text', nullable: false })
     location: string;
 
-    // Relationships
+    // Relationships: A user can have/own many companies
     @ManyToOne(() => User, user => user.businessProfile)
     user: User;
 

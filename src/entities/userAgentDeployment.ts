@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne } from "typeorm";
 import { User } from "./user";
 import DefaultEntity, { SubscriptionStatus } from "./defaultEntity";
-import { AIAgent } from "./aiAgent";
+import { AIAgent } from "./agent";
 
 @Entity()
 export class UserAgentDeployment extends DefaultEntity {
