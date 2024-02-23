@@ -17,14 +17,16 @@ enum AIAgentDomain {
 }
 
 type AIAgentResponse {
-  description: String!
+  description: String
   domain: AIAgentDomain!
   embed: String!
-  features: String!
   id: ID!
+  instruction: String
   name: String!
-  preTrainedData: String
+  preTrainedDataURL: String
   pricing: String
+  timeout: DateTimeISO
+  welcomeMessage: String
 }
 
 type Company {
@@ -48,9 +50,32 @@ enum CompanySize {
   SMALL
 }
 
+input CreateAgentInput {
+  description: String
+  domain: AIAgentDomain!
+  instruction: String
+  model: String!
+  name: String!
+  preTrainedDataURL: String
+  pricing: String
+  timeout: DateTimeISO
+  tools: [IntegratedTool!]
+  welcomeMessage: String
+}
+
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format.
+"""
+scalar DateTimeISO
+
+"""The tools granting more capability to the AI agent"""
+enum IntegratedTool {
+  YOUTUBE_VIDEO_TRANSCRIPTION
+}
+
 type Mutation {
   allocatePreferenceToCompany(companyId: String!, preferences: [PreferenceInput!]!): CompanyMutationResponse!
-  createAgentDeployment(data: createAIAgentInput!): AIAgentResponse!
+  createAgent(data: CreateAgentInput!): AIAgentResponse!
   createCompany(data: PartialCompanyInput!): CompanyMutationResponse!
   signInUser(data: SignInUserInput!): SignInUserResponse!
   signUp(data: SignUpUserInput!): SignUpUserResponse!
@@ -101,13 +126,4 @@ type UserCompayQueryResponse {
 type UserQueryResponse {
   email: String!
   id: ID!
-}
-
-input createAIAgentInput {
-  description: String!
-  domain: AIAgentDomain!
-  features: String!
-  name: String!
-  preTrainedData: String
-  pricing: String
 }

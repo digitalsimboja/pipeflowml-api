@@ -1,3 +1,5 @@
+
+import { IntegratedTool } from "../../../entities/tool";
 import { AIAgentDomain } from "../../../entities/agent";
 import { Field, ID, InputType, ObjectType, registerEnumType } from "type-graphql";
 
@@ -7,13 +9,19 @@ registerEnumType(AIAgentDomain, {
     description: "The domain of the AI Agent"
 });
 
+registerEnumType(IntegratedTool, {
+    name: "IntegratedTool",
+    description: "The tools granting more capability to the AI agent"
+});
+
+
 @InputType()
-export class CreateAIAgentInput {
+export class CreateAgentInput {
     @Field()
     name: string;
 
-    @Field()
-    description: string;
+    @Field(_ => String, { nullable: true })
+    description?: string;
 
     @Field()
     model: string;
@@ -22,19 +30,22 @@ export class CreateAIAgentInput {
     domain: AIAgentDomain;
 
     // Optional fields
-    @Field(() => String, {nullable: true})
-    instruction?: string
+    @Field(() => String, { nullable: true })
+    instruction?: string;
 
-    @Field(() => String, {nullable: true})
+    @Field(() => String, { nullable: true })
     welcomeMessage?: string;
 
-    @Field(() => Date, { nullable: true }) 
-    timeout?: Date;
+    @Field(() => [IntegratedTool], { nullable: true })
+    tools?: IntegratedTool[]
 
-    @Field({ nullable: true }) 
+    @Field(() => Date, { nullable: true })
+    timeout?: Date | null;
+
+    @Field({ nullable: true })
     preTrainedDataURL?: string;
 
-    @Field({ nullable: true }) 
+    @Field({ nullable: true })
     pricing?: string;
 }
 
@@ -46,25 +57,25 @@ export class AIAgentResponse {
     @Field()
     name: string;
 
-    @Field()
-    description: string;
+    @Field({ nullable: true })
+    description?: string;
 
     @Field(() => AIAgentDomain)
     domain: AIAgentDomain;
 
-    @Field({ nullable: true }) 
+    @Field({ nullable: true })
     instruction?: string;
 
-    @Field({ nullable: true }) 
+    @Field({ nullable: true })
     welcomeMessage?: string;
 
-    @Field({ nullable: true }) 
+    @Field({ nullable: true })
     timeout?: Date;
 
-    @Field({ nullable: true }) 
+    @Field({ nullable: true })
     preTrainedDataURL?: string;
 
-    @Field({ nullable: true }) 
+    @Field({ nullable: true })
     pricing?: string;
 
     @Field()

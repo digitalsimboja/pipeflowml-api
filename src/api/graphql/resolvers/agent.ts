@@ -1,7 +1,8 @@
 import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
-import { AIAgentResponse, CreateAIAgentInput } from "../typeDefs/agent";
+import { AIAgentResponse, CreateAgentInput } from "../typeDefs/agent";
 import { AuthorizedContext } from "../common";
-import { AIAgentDomain } from "../../../entities/agent";
+import { AIAgent, AIAgentDomain } from "../../../entities/agent";
+import { safeFindUserOrFail } from "../../../entities/user";
 
 
 @Resolver()
@@ -9,14 +10,20 @@ export default class AgentResolver {
 
     @Mutation(() => AIAgentResponse)
     async createAgent(
-        @Arg("data") data: CreateAIAgentInput,
+        @Arg("data") data: CreateAgentInput,
         @Ctx() ctx: AuthorizedContext): Promise<AIAgentResponse> {
-        // Check if the user is authorized
-        // Accept the uploaded pre-trained data
-        // Use it to train the Agent
-        // Assign the agent created to the user that deployed it
-        // generate the embed link
-        // if training succeeds, return the trained agent
+        const user = await safeFindUserOrFail(ctx.userId, ctx);
+       
+        console.log({ctx, user})
+
+        const newAgent: AIAgent = new AIAgent()
+        newAgent.name = data.name;
+        newAgent.description = data?.description || "";
+        newAgent.model = data.model;
+        newAgent.domain = data.domain;
+        newAgent.instruction = data?.instruction || ""
+        newAgent.welcomeMessage = data?.welcomeMessage || ""
+
         const agentResponse: AIAgentResponse = {
             id: "bt123ggtx",
             name: data.name,

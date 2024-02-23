@@ -1,7 +1,7 @@
 import { Column, Entity, OneToMany } from "typeorm";
 import DefaultEntity from "./defaultEntity";
 import { UserAgentDeployment } from "./userAgentDeployment";
-import Tools from "./tools";
+import { Tool } from "./tool";
 
 export enum AIAgentDomain {
     SALES = "Sales",
@@ -18,10 +18,10 @@ export enum AIAgentDomain {
 @Entity()
 export class AIAgent extends DefaultEntity {
     @Column()
-    name: string;
+    name: string; // name of the agent when responding to output
 
-    @Column()
-    description: string;
+    @Column({ nullable: true, type: 'text' })
+    description?: string;
 
     @Column()
     model: string;
@@ -41,18 +41,15 @@ export class AIAgent extends DefaultEntity {
     timeout: Date;
 
     @Column({ nullable: true })
-    preTrainedDataURL?: string;
+    preTrainedDataURL?: string; // Represents the URL or the index of the Pinecone  Dataset used for training
 
-    @Column({ nullable: true })
-    pricing?: string;
 
     @Column({ type: 'text' })
-    embed: string;
-
-    // Integrated tools
-    @OneToMany(() => Tools, tool => tool.agent)
-    tools: Tools[];
+    sharableURL: string;  // Shareable link
 
     @OneToMany(() => UserAgentDeployment, deployment => deployment.agent)
     userDeployments: UserAgentDeployment[];
+
+    @OneToMany(() => Tool, tool => tool.agent) // List of integrated tools to be used by the agent
+    tools: Tool[];
 }
