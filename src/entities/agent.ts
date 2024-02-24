@@ -12,44 +12,48 @@ export enum AIAgentDomain {
     LEGAL = 'Legal',
     HEALTHCARE = 'Healthcare',
     REAL_ESTATE = 'Real Estate',
-    FINANCIAL = 'Financial'
+    FINANCIAL = 'Financial',
+    GENERAL = 'General' // Use as general conversational agent
 }
 
+export enum LLMModel {
+    GPT3_5 = "OPENAI GPT3.5",
+    GPT3_5_16_K = "OPENAI GPT3.5 16K",
+    GPT3_5_0613 = "OPENAI GPT3.5 0613",
+    GPT3_5_1106 = "OPENAI GPT3.5 1106",
+    GPT4 = "OPENAI GPT4",
+    GPT4_32K_0613 = "OPENAI GPT4 32K 0613",
+    GPT4_0613 = "OPENAI GPT4 0613",
+    GPT4_TURBO_1106 = "OPENAI GPT4 TURBO 1106",
+    GPT4_TURBO_0125 = "OPENAI GPT4 TURBO 0125",
+    FIREWORKS = "FIREWORKS AI FUNCTION CALLING 34B"
+}
 @Entity()
 export class AIAgent extends DefaultEntity {
     @Column()
-    name: string; // name of the agent when responding to output
+    name: string;
 
-    @Column({ nullable: true, type: 'text' })
-    description?: string;
+    @Column({ nullable: true, type: 'text', default: '' })
+    description: string;
 
-    @Column()
-    model: string;
+    @Column({ type: 'enum', enum: LLMModel, nullable: false, default: LLMModel.GPT3_5 })
+    model: LLMModel;
 
     @Column({ type: 'enum', enum: AIAgentDomain, nullable: false })
-    domain: AIAgentDomain
+    domain: AIAgentDomain;
 
-    // Prompt instruction: e.g You are a helpful, respectful and honest assistant. If you don't know the answer to a question, please don't share false information.
-    @Column({ nullable: true, type: 'text' })
-    instruction?: string;
+    @Column({ nullable: true, type: 'text', default: '' })
+    instructions?: string;
 
-    @Column({ nullable: true, type: 'text' })
-    welcomeMessage?: string
+    @Column({ nullable: true, type: 'text', default: '' })
+    welcomeMessages?: string;
 
-    // The work period of the Agent. The agent wakes up after this timeout
-    @Column({ nullable: true, type: 'timestamp' })
-    timeout: Date;
-
-    @Column({ nullable: true })
-    preTrainedDataURL?: string; // Represents the URL or the index of the Pinecone  Dataset used for training
-
-
-    @Column({ type: 'text' })
-    sharableURL: string;  // Shareable link
+    @Column({ type: 'text', default: '' })
+    sharableURL: string;
 
     @OneToMany(() => UserAgentDeployment, deployment => deployment.agent)
     userDeployments: UserAgentDeployment[];
 
-    @OneToMany(() => Tool, tool => tool.agent) // List of integrated tools to be used by the agent
+    @OneToMany(() => Tool, tool => tool.agent)
     tools: Tool[];
 }

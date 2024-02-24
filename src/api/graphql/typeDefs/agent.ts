@@ -1,6 +1,6 @@
 
 import { IntegratedTool } from "../../../entities/tool";
-import { AIAgentDomain } from "../../../entities/agent";
+import { AIAgentDomain, LLMModel } from "../../../entities/agent";
 import { Field, ID, InputType, ObjectType, registerEnumType } from "type-graphql";
 
 // Register the enum type
@@ -14,6 +14,11 @@ registerEnumType(IntegratedTool, {
     description: "The tools granting more capability to the AI agent"
 });
 
+registerEnumType(LLMModel, {
+    name: "LLMModel",
+    description: "Language Learning Model used by the AI agent for language understanding and generation."
+})
+
 
 @InputType()
 export class CreateAgentInput {
@@ -23,30 +28,21 @@ export class CreateAgentInput {
     @Field(_ => String, { nullable: true })
     description?: string;
 
-    @Field()
-    model: string;
+    @Field(() => LLMModel, { defaultValue: LLMModel.GPT3_5 })
+    model: LLMModel;
 
     @Field(() => AIAgentDomain)
     domain: AIAgentDomain;
 
     // Optional fields
     @Field(() => String, { nullable: true })
-    instruction?: string;
+    instructions?: string;
 
     @Field(() => String, { nullable: true })
-    welcomeMessage?: string;
+    welcomeMessages?: string;
 
     @Field(() => [IntegratedTool], { nullable: true })
     tools?: IntegratedTool[]
-
-    @Field(() => Date, { nullable: true })
-    timeout?: Date | null;
-
-    @Field({ nullable: true })
-    preTrainedDataURL?: string;
-
-    @Field({ nullable: true })
-    pricing?: string;
 }
 
 @ObjectType()
@@ -73,11 +69,8 @@ export class AIAgentResponse {
     timeout?: Date;
 
     @Field({ nullable: true })
-    preTrainedDataURL?: string;
+    indexName?: string;
 
-    @Field({ nullable: true })
-    pricing?: string;
-
-    @Field()
-    embed: string;
+    @Field(() => String)
+    sharableURL: string;
 }

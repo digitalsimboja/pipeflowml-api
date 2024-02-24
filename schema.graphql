@@ -19,12 +19,11 @@ enum AIAgentDomain {
 type AIAgentResponse {
   description: String
   domain: AIAgentDomain!
-  embed: String!
   id: ID!
+  indexName: String
   instruction: String
   name: String!
-  preTrainedDataURL: String
-  pricing: String
+  sharableURL: String!
   timeout: DateTimeISO
   welcomeMessage: String
 }
@@ -53,11 +52,10 @@ enum CompanySize {
 input CreateAgentInput {
   description: String
   domain: AIAgentDomain!
+  indexName: String
   instruction: String
   model: String!
   name: String!
-  preTrainedDataURL: String
-  pricing: String
   timeout: DateTimeISO
   tools: [IntegratedTool!]
   welcomeMessage: String

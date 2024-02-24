@@ -12,9 +12,7 @@ export class UserAgentDeployment extends DefaultEntity {
     @ManyToOne(() => AIAgent, agent => agent.userDeployments)
     agent: AIAgent;
 
-    @Column({ type: 'enum', enum: SubscriptionStatus, default: SubscriptionStatus.INACTIVE, nullable: false })
+    @Column({ type: 'enum', enum: SubscriptionStatus, default: SubscriptionStatus.ACTIVE, nullable: false })
     subscriptionStatus: SubscriptionStatus;
 
-    @Column()
-    subscriptionExpiryDate: Date;
 }
