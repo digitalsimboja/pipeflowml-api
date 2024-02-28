@@ -31,7 +31,7 @@ export class CreateAgentInput {
     @Field(() => LLMModel, { defaultValue: LLMModel.GPT3_5 })
     model: LLMModel;
 
-    @Field(() => AIAgentDomain, {defaultValue: AIAgentDomain.ASSISTANT})
+    @Field(() => AIAgentDomain, { defaultValue: AIAgentDomain.ASSISTANT })
     domain: AIAgentDomain;
 
     // Optional fields
@@ -67,4 +67,29 @@ export class AIAgentResponse {
 
     @Field(() => String)
     sharableURL: string;
+    
+    @Field(() => [IntegratedTool], { nullable: true })
+    tools?: IntegratedTool[]
+}
+
+@InputType()
+export class PartialAgentInput {
+    @Field({ nullable: true })
+    name?: string;
+
+    @Field({ nullable: true })
+    description?: string;
+
+    @Field(() => AIAgentDomain, { nullable: true })
+    domain: AIAgentDomain;
+
+    @Field({ nullable: true })
+    instruction?: string;
+
+    @Field({ nullable: true })
+    welcomeMessage?: string;
+
+    @Field(() => [IntegratedTool], { nullable: true })
+    tools?: IntegratedTool[]
+
 }

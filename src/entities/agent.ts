@@ -1,7 +1,7 @@
-import { Column, Entity, OneToMany } from "typeorm";
+import { Column, Entity, ManyToOne } from "typeorm";
 import DefaultEntity from "./defaultEntity";
-import { UserAgentDeployment } from "./userAgentDeployment";
 import { IntegratedTool } from "./tool";
+import { User } from "./user";
 
 export enum AIAgentDomain {
     SALES = "Sales",
@@ -51,8 +51,8 @@ export class Agent extends DefaultEntity {
     @Column({ type: 'text', default: '' })
     sharableURL: string;
 
-    @OneToMany(() => UserAgentDeployment, deployment => deployment.agent)
-    userDeployments: UserAgentDeployment[];
+    @ManyToOne(() => User, user => user.agents)
+    user: User;
 
     @Column({ type: "enum", enum: IntegratedTool, array: true, default: [IntegratedTool.EVVELANDAI] })
     tools: IntegratedTool[];

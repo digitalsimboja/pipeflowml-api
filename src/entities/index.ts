@@ -6,7 +6,7 @@ import { Match } from "./match";
 import { Preference } from "./preference";
 import { Tool } from "./tool";
 import { User } from "./user";
-import { UserAgentDeployment } from "./userAgentDeployment";
+
 
 export const registeredEntities = [
     User,
@@ -15,7 +15,6 @@ export const registeredEntities = [
     Match,
     Event,
     Feedback,
-    UserAgentDeployment,
     Agent,
     Tool
 ]

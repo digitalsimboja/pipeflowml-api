@@ -24,6 +24,7 @@ type AIAgentResponse {
   instruction: String
   name: String!
   sharableURL: String!
+  tools: [IntegratedTool!]
   welcomeMessage: String
 }
 
@@ -87,6 +88,16 @@ type Mutation {
   createCompany(data: PartialCompanyInput!): CompanyMutationResponse!
   signInUser(data: SignInUserInput!): SignInUserResponse!
   signUp(data: SignUpUserInput!): SignUpUserResponse!
+  updateAgent(data: PartialAgentInput!, id: String!): AIAgentResponse!
+}
+
+input PartialAgentInput {
+  description: String
+  domain: AIAgentDomain
+  instruction: String
+  name: String
+  tools: [IntegratedTool!]
+  welcomeMessage: String
 }
 
 input PartialCompanyInput {
