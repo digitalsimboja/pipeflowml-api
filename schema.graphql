@@ -5,6 +5,7 @@
 
 """The domain of the AI Agent"""
 enum AIAgentDomain {
+  ASSISTANT
   CUSTOMERSERVICE
   FINANCIAL
   HEALTHCARE
@@ -20,11 +21,9 @@ type AIAgentResponse {
   description: String
   domain: AIAgentDomain!
   id: ID!
-  indexName: String
   instruction: String
   name: String!
   sharableURL: String!
-  timeout: DateTimeISO
   welcomeMessage: String
 }
 
@@ -51,24 +50,35 @@ enum CompanySize {
 
 input CreateAgentInput {
   description: String
-  domain: AIAgentDomain!
-  indexName: String
+  domain: AIAgentDomain! = ASSISTANT
   instruction: String
-  model: String!
+  model: LLMModel! = GPT3_5
   name: String!
-  timeout: DateTimeISO
   tools: [IntegratedTool!]
   welcomeMessage: String
 }
 
-"""
-A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.This scalar is serialized to a string in ISO 8601 format and parsed from a string in ISO 8601 format.
-"""
-scalar DateTimeISO
-
 """The tools granting more capability to the AI agent"""
 enum IntegratedTool {
+  EMAILTOOOL
+  EVVELANDAI
   YOUTUBE_VIDEO_TRANSCRIPTION
+}
+
+"""
+Language Learning Model used by the AI agent for language understanding and generation.
+"""
+enum LLMModel {
+  FIREWORKS
+  GPT3_5
+  GPT3_5_0613
+  GPT3_5_16_K
+  GPT3_5_1106
+  GPT4
+  GPT4_0613
+  GPT4_32K_0613
+  GPT4_TURBO_0125
+  GPT4_TURBO_1106
 }
 
 type Mutation {
