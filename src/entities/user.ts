@@ -38,7 +38,7 @@ export class User extends DefaultEntity {
     }
 
 }
-
+//TODO: Modify to make more scalable and to load relations appropriately
 export const safeFindUserOrFail = async (id: string, ctx: Context, relations?: string[]): Promise<User> => {
     const userId = ctx.userId;
     if (userId !== id) {

@@ -1,7 +1,7 @@
 import { Column, Entity, OneToMany } from "typeorm";
 import DefaultEntity from "./defaultEntity";
 import { UserAgentDeployment } from "./userAgentDeployment";
-import { Tool } from "./tool";
+import { IntegratedTool } from "./tool";
 
 export enum AIAgentDomain {
     SALES = "Sales",
@@ -13,7 +13,7 @@ export enum AIAgentDomain {
     HEALTHCARE = 'Healthcare',
     REAL_ESTATE = 'Real Estate',
     FINANCIAL = 'Financial',
-    GENERAL = 'General' // Use as general conversational agent
+    ASSISTANT = 'General' // Use as general conversational agent
 }
 
 export enum LLMModel {
@@ -43,10 +43,10 @@ export class AIAgent extends DefaultEntity {
     domain: AIAgentDomain;
 
     @Column({ nullable: true, type: 'text', default: '' })
-    instructions?: string;
+    instruction?: string;
 
     @Column({ nullable: true, type: 'text', default: '' })
-    welcomeMessages?: string;
+    welcomeMessage?: string;
 
     @Column({ type: 'text', default: '' })
     sharableURL: string;
@@ -54,6 +54,6 @@ export class AIAgent extends DefaultEntity {
     @OneToMany(() => UserAgentDeployment, deployment => deployment.agent)
     userDeployments: UserAgentDeployment[];
 
-    @OneToMany(() => Tool, tool => tool.agent)
-    tools: Tool[];
+    @Column({ type: "enum", enum: IntegratedTool, array: true, default: [IntegratedTool.EVVELANDAI] })
+    tools: IntegratedTool[];
 }

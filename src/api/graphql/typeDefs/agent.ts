@@ -31,15 +31,15 @@ export class CreateAgentInput {
     @Field(() => LLMModel, { defaultValue: LLMModel.GPT3_5 })
     model: LLMModel;
 
-    @Field(() => AIAgentDomain)
+    @Field(() => AIAgentDomain, {defaultValue: AIAgentDomain.ASSISTANT})
     domain: AIAgentDomain;
 
     // Optional fields
     @Field(() => String, { nullable: true })
-    instructions?: string;
+    instruction?: string;
 
     @Field(() => String, { nullable: true })
-    welcomeMessages?: string;
+    welcomeMessage?: string;
 
     @Field(() => [IntegratedTool], { nullable: true })
     tools?: IntegratedTool[]
@@ -64,12 +64,6 @@ export class AIAgentResponse {
 
     @Field({ nullable: true })
     welcomeMessage?: string;
-
-    @Field({ nullable: true })
-    timeout?: Date;
-
-    @Field({ nullable: true })
-    indexName?: string;
 
     @Field(() => String)
     sharableURL: string;

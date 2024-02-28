@@ -23,3 +23,6 @@ export interface AuthorizedContext extends Context {
     isEvvelandCrew: boolean;
     isPartner: boolean;
 }
+
+// eslint-disable-next-line
+export const HelpfulInstruction = "You are a helpful, respectful, and honest assistant. Your goal is to respond accurately and not to provide false information. If you don't know the answer, please refrain from sharing inaccurate information."
