@@ -18,7 +18,7 @@ export interface CompnayProps {
     size: CompanySize
     location: string;
 }
-@Entity({ name: 'company' })
+@Entity()
 export class Company extends DefaultEntity {
 
     @Column({ type: 'text', nullable: false })

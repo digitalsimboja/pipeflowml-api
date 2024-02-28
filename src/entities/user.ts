@@ -12,7 +12,7 @@ export interface UserProps {
     password: string;
 
 }
-@Entity({ name: 'user' })
+@Entity()
 export class User extends DefaultEntity {
 
     @Column({ type: 'text', nullable: false })

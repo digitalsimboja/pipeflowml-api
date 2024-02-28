@@ -1,4 +1,4 @@
-import { AIAgent } from "./agent";
+import { Agent } from "./agent";
 import { Company } from "./company";
 import { Event } from "./event";
 import { Feedback } from "./feedback";
@@ -16,6 +16,6 @@ export const registeredEntities = [
     Event,
     Feedback,
     UserAgentDeployment,
-    AIAgent,
+    Agent,
     Tool
 ]

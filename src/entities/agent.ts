@@ -29,7 +29,7 @@ export enum LLMModel {
     FIREWORKS = "FIREWORKS AI FUNCTION CALLING 34B"
 }
 @Entity()
-export class AIAgent extends DefaultEntity {
+export class Agent extends DefaultEntity {
     @Column()
     name: string;
 

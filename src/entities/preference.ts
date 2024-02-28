@@ -3,7 +3,7 @@ import { Company } from "./company";
 import DefaultEntity from "./defaultEntity";
 import { User } from "./user";
 
-@Entity({ name: "preference" })
+@Entity()
 export class Preference extends DefaultEntity {
     @Column({nullable: true  })
     preferredIndustry: string;

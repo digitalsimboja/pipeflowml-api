@@ -1,7 +1,7 @@
 import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
 import { AIAgentResponse, CreateAgentInput } from "../typeDefs/agent";
 import { AuthorizedContext } from "../common";
-import { AIAgent, AIAgentDomain } from "../../../entities/agent";
+import { Agent, AIAgentDomain } from "../../../entities/agent";
 import { User, safeFindUserOrFail } from "../../../entities/user";
 import { AppDataSource } from "../../../config/datasource";
 import { UserAgentDeployment } from "../../../entities/userAgentDeployment";
@@ -18,7 +18,7 @@ export default class AgentResolver {
         @Ctx() ctx: AuthorizedContext): Promise<AIAgentResponse> {
         const user = await safeFindUserOrFail(ctx.userId, ctx, ["agentDeployments"]);
 
-        const newAgent = new AIAgent();
+        const newAgent = new Agent();
         newAgent.name = data.name;
         newAgent.description = data?.description || "";
         newAgent.model = data.model;
@@ -29,7 +29,7 @@ export default class AgentResolver {
         newAgent.sharableURL = `<h1> Completed successfully by ${ctx.userId}</h1>`
 
 
-        const agentRepository = AppDataSource.getRepository(AIAgent)
+        const agentRepository = AppDataSource.getRepository(Agent)
         const savedAgent = await agentRepository.save(newAgent);
 
         const newUserAgenDeploymnet = new UserAgentDeployment()
