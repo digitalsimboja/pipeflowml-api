@@ -2,12 +2,12 @@ import { Column, Entity } from "typeorm";
 import DefaultEntity from "./defaultEntity";
 
 export enum IntegratedTool {
-    YOUTUBE_VIDEO_TRANSCRIPTION = "YouTube Video Transcription",
-    EMAILTOOOL = "Email  Tool",
-    EVVELANDAI = "Evveland AI Specialized trained model",
+    YOUTUBE_VIDEO_TRANSCRIPTION = "YouTubeVideoTranscription",
+    EMAILTOOOL = "emailresponder",
+    EVVELANDAI = "evvelandai",
 }
 
-@Entity({ name: 'tools equipped with agent' })
+@Entity()
 export class Tool extends DefaultEntity {
 
     @Column({ type: 'enum', enum: IntegratedTool, nullable: false, default: IntegratedTool.EVVELANDAI })

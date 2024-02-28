@@ -17,7 +17,7 @@ export default class AgentResolver {
         @Arg("data") data: CreateAgentInput,
         @Ctx() ctx: AuthorizedContext): Promise<AIAgentResponse> {
         const user = await safeFindUserOrFail(ctx.userId, ctx, ["agentDeployments"]);
-        console.log({ user })
+
         const newAgent = new AIAgent();
         newAgent.name = data.name;
         newAgent.description = data?.description || "";
@@ -26,6 +26,7 @@ export default class AgentResolver {
         newAgent.instruction = data?.instruction || HelpfulInstruction;
         newAgent.welcomeMessage = data?.welcomeMessage || "";
         newAgent.tools = data?.tools || [IntegratedTool.EVVELANDAI]
+        newAgent.sharableURL = `<h1> Completed successfully by ${ctx.userId}</h1>`
 
 
         const agentRepository = AppDataSource.getRepository(AIAgent)
@@ -41,9 +42,6 @@ export default class AgentResolver {
         const userRepository = AppDataSource.getRepository(User)
         user.agentDeployments.push(newAgentDeployment)
         await userRepository.save(user);
-
-        const repoUser = await safeFindUserOrFail(ctx.userId, ctx, ["agentDeployments"]);
-        console.log({ repoUser })
 
         const agentResponse: AIAgentResponse = {
             id: savedAgent.id,
