@@ -42,8 +42,7 @@ const loginUser = async (params: {
 export default class AuthResolver {
 
     async _signUpNewUser(data: SignUpUserInput) {
-        
-       
+
         const userRepository = AppDataSource.getRepository(DBUser);
 
         const newUser = new DBUser({ ...data, email: data.email, password: data.password });

@@ -2,16 +2,17 @@ import { Column, Entity } from "typeorm";
 import DefaultEntity from "./defaultEntity";
 
 export enum IntegratedTool {
-    YOUTUBE_VIDEO_TRANSCRIPTION = "YouTubeVideoTranscription",
-    EMAILTOOOL = "emailresponder",
-    EVVELANDAI = "evvelandai",
-}
+    IndustryResearch = 'INDUSTRY_RESEARCH',
+    EmailResponder = 'EMAIL_RESPONDER',
+    YouTubeTranscriber = 'YOUTUBE_TRANSCRIBER',
+    ExtractDataFromPDF = 'EXTRACT_DATA_FROM_PDF',
+    InvoiceGeneratorAssistant = 'INVOICE_GENERATOR_ASSISTANT',
+    MarketingRep = 'MARKETING_REP',
+    EvvelandAI = "EVVELAND_AI"
+  }
 
 @Entity()
 export class Tool extends DefaultEntity {
-
-    @Column({ type: 'enum', enum: IntegratedTool, nullable: false, default: IntegratedTool.EVVELANDAI })
-    name: IntegratedTool;
 
     @Column({ nullable: true, type: 'text' })
     description?: string;

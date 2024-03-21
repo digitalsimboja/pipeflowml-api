@@ -59,11 +59,20 @@ input CreateAgentInput {
   welcomeMessage: String
 }
 
+type CreateToolResponse {
+  description: String
+  name: IntegratedTool!
+}
+
 """The tools granting more capability to the AI agent"""
 enum IntegratedTool {
-  EMAILTOOOL
-  EVVELANDAI
-  YOUTUBE_VIDEO_TRANSCRIPTION
+  EmailResponder
+  EvvelandAI
+  ExtractDataFromPDF
+  IndustryResearch
+  InvoiceGeneratorAssistant
+  MarketingRep
+  YouTubeTranscriber
 }
 
 """
@@ -86,6 +95,7 @@ type Mutation {
   allocatePreferenceToCompany(companyId: String!, preferences: [PreferenceInput!]!): CompanyMutationResponse!
   createAgent(data: CreateAgentInput!): AIAgentResponse!
   createCompany(data: PartialCompanyInput!): CompanyMutationResponse!
+  createTool: CreateToolResponse!
   signInUser(data: SignInUserInput!): SignInUserResponse!
   signUp(data: SignUpUserInput!): SignUpUserResponse!
   updateAgent(data: PartialAgentInput!, id: String!): AIAgentResponse!

@@ -5,7 +5,6 @@ import { Agent, AIAgentDomain } from "../../../entities/agent";
 import { User, safeFindUserOrFail } from "../../../entities/user";
 import { AppDataSource } from "../../../config/datasource";
 import { HelpfulInstruction } from "../common";
-import { IntegratedTool } from "../../../entities/tool";
 
 
 @Resolver()
@@ -26,7 +25,7 @@ export default class AgentResolver {
             newAgent.domain = data.domain;
             newAgent.instruction = data?.instruction || HelpfulInstruction;
             newAgent.welcomeMessage = data?.welcomeMessage || "";
-            newAgent.tools = data?.tools || [IntegratedTool.EVVELANDAI];
+           
 
             const agentRepository = AppDataSource.getRepository(Agent);
             const savedAgent = await agentRepository.save(newAgent);
@@ -101,7 +100,6 @@ export default class AgentResolver {
                 instruction: updatedAgent?.instruction,
                 welcomeMessage: updatedAgent?.welcomeMessage,
                 sharableURL: updatedAgent?.sharableURL,
-                tools: updatedAgent?.tools
             }
 
         } catch (error) {

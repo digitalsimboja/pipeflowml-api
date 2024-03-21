@@ -1,6 +1,5 @@
 import { Column, Entity, ManyToOne } from "typeorm";
 import DefaultEntity from "./defaultEntity";
-import { IntegratedTool } from "./tool";
 import { User } from "./user";
 
 export enum AIAgentDomain {
@@ -13,7 +12,7 @@ export enum AIAgentDomain {
     HEALTHCARE = 'Healthcare',
     REAL_ESTATE = 'Real Estate',
     FINANCIAL = 'Financial',
-    ASSISTANT = 'General' // Use as general conversational agent
+    ASSISTANT = 'Assistant'
 }
 
 export enum LLMModel {
@@ -54,6 +53,5 @@ export class Agent extends DefaultEntity {
     @ManyToOne(() => User, user => user.agents)
     user: User;
 
-    @Column({ type: "enum", enum: IntegratedTool, array: true, default: [IntegratedTool.EVVELANDAI] })
-    tools: IntegratedTool[];
+    
 }
