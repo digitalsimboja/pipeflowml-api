@@ -8,7 +8,8 @@ export enum IntegratedTool {
     ExtractDataFromPDF = 'EXTRACT_DATA_FROM_PDF',
     InvoiceGeneratorAssistant = 'INVOICE_GENERATOR_ASSISTANT',
     MarketingRep = 'MARKETING_REP',
-    EvvelandAI = "EVVELAND_AI"
+    EvvelandAI = "EVVELAND_AI",
+    MatchMaker = "MATCHMAKER"
   }
 
 @Entity()

@@ -1,6 +1,7 @@
 import { Column, Entity, ManyToOne } from "typeorm";
 import DefaultEntity from "./defaultEntity";
 import { User } from "./user";
+import { IntegratedTool } from "./tool";
 
 export enum AIAgentDomain {
     SALES = "Sales",
@@ -47,11 +48,14 @@ export class Agent extends DefaultEntity {
     @Column({ nullable: true, type: 'text', default: '' })
     welcomeMessage?: string;
 
+    @Column({ type: 'simple-array', enum: IntegratedTool, nullable: false })
+    tools: IntegratedTool[];
+
     @Column({ type: 'text', default: '' })
     sharableURL: string;
 
     @ManyToOne(() => User, user => user.agents)
     user: User;
 
-    
+
 }

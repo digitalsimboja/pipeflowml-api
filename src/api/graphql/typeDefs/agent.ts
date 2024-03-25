@@ -42,7 +42,7 @@ export class CreateAgentInput {
     welcomeMessage?: string;
 
     @Field(() => [IntegratedTool], { nullable: true })
-    tools?: IntegratedTool[]
+    tools: IntegratedTool[]
 }
 
 @ObjectType()

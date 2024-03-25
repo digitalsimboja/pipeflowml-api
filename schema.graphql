@@ -72,6 +72,7 @@ enum IntegratedTool {
   IndustryResearch
   InvoiceGeneratorAssistant
   MarketingRep
+  MatchMaker
   YouTubeTranscriber
 }
 

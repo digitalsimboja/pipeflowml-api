@@ -25,6 +25,7 @@ export default class AgentResolver {
             newAgent.domain = data.domain;
             newAgent.instruction = data?.instruction || HelpfulInstruction;
             newAgent.welcomeMessage = data?.welcomeMessage || "";
+            newAgent.tools = data.tools;
            
 
             const agentRepository = AppDataSource.getRepository(Agent);
@@ -43,9 +44,9 @@ export default class AgentResolver {
             const agentResponse: AIAgentResponse = {
                 id: savedAgent.id,
                 name: savedAgent.name,
-                description: savedAgent.description,
                 domain: savedAgent.domain || AIAgentDomain.ASSISTANT,
-                sharableURL: `<h1> Completed successfully by ${ctx.userId}</h1>`
+                sharableURL: `<h1> Completed successfully by ${ctx.userId}</h1>`,
+                tools: savedAgent.tools
             };
 
             return agentResponse;
