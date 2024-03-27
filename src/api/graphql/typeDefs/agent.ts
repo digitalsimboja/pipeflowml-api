@@ -1,5 +1,5 @@
 
-import { IntegratedTool } from "../../../entities/tool";
+import { ToolType } from "../../../entities/tool";
 import { AIAgentDomain, LLMModel } from "../../../entities/agent";
 import { Field, ID, InputType, ObjectType, registerEnumType } from "type-graphql";
 
@@ -9,16 +9,28 @@ registerEnumType(AIAgentDomain, {
     description: "The domain of the AI Agent"
 });
 
-registerEnumType(IntegratedTool, {
-    name: "IntegratedTool",
+registerEnumType(ToolType, {
+    name: "ToolType",
     description: "The tools granting more capability to the AI agent"
 });
 
 registerEnumType(LLMModel, {
     name: "LLMModel",
-    description: "Language Learning Model used by the AI agent for language understanding and generation."
+    description: "Large Language Model used by the AI agent for language understanding and generation."
 })
 
+@ObjectType()
+export class ToolResponse {
+    @Field()
+    name: string;
+
+    @Field()
+    isTemplate: boolean;
+
+    @Field(_ => ToolType)
+    type!: ToolType;
+
+}
 
 @InputType()
 export class CreateAgentInput {
@@ -34,19 +46,21 @@ export class CreateAgentInput {
     @Field(() => AIAgentDomain, { defaultValue: AIAgentDomain.ASSISTANT })
     domain: AIAgentDomain;
 
-    // Optional fields
     @Field(() => String, { nullable: true })
     instruction?: string;
 
     @Field(() => String, { nullable: true })
     welcomeMessage?: string;
 
-    @Field(() => [IntegratedTool], { nullable: true })
-    tools: IntegratedTool[]
+    @Field()
+    useTemplate: boolean;
+
+    @Field(() => [ID], { nullable: true })
+    toolIds: string[];
 }
 
 @ObjectType()
-export class AIAgentResponse {
+export class CreateAgentResponse {
     @Field(_ => ID)
     id: string;
 
@@ -67,9 +81,9 @@ export class AIAgentResponse {
 
     @Field(() => String)
     sharableURL: string;
-    
-    @Field(() => [IntegratedTool], { nullable: true })
-    tools?: IntegratedTool[]
+
+    @Field(() => [ToolResponse], { nullable: true })
+    tools?: ToolResponse[]
 }
 
 @InputType()
@@ -89,7 +103,7 @@ export class PartialAgentInput {
     @Field({ nullable: true })
     welcomeMessage?: string;
 
-    @Field(() => [IntegratedTool], { nullable: true })
-    tools?: IntegratedTool[]
+    @Field(() => [ToolType], { nullable: true })
+    tools?: ToolType[]
 
 }

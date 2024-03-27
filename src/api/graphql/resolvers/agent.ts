@@ -1,22 +1,41 @@
 import { Arg, Ctx, Mutation, Resolver } from "type-graphql";
-import { AIAgentResponse, CreateAgentInput, PartialAgentInput } from "../typeDefs/agent";
+import { CreateAgentResponse, CreateAgentInput, PartialAgentInput } from "../typeDefs/agent";
 import { AuthorizedContext } from "../common";
 import { Agent, AIAgentDomain } from "../../../entities/agent";
 import { User, safeFindUserOrFail } from "../../../entities/user";
 import { AppDataSource } from "../../../config/datasource";
 import { HelpfulInstruction } from "../common";
+import { Tool } from "../../../entities/tool";
 
 
 @Resolver()
 export default class AgentResolver {
 
-    @Mutation(() => AIAgentResponse)
+    @Mutation(() => CreateAgentResponse)
     async createAgent(
         @Arg("data") data: CreateAgentInput,
         @Ctx() ctx: AuthorizedContext
-    ): Promise<AIAgentResponse> {
+    ): Promise<CreateAgentResponse> {
         try {
             const user = await safeFindUserOrFail(ctx.userId, ctx, ["agents"]);
+
+            const toolRespository = AppDataSource.getRepository(Tool)
+
+            let tools = []
+            const toolIds = data.toolIds || [];
+            if (toolIds.length > 0) {
+                for (const toolId of toolIds) {
+                    const tool = await toolRespository.findOne({
+                        where: {
+                            id: toolId
+                        }
+                    })
+                    if (tool) {
+                        tools.push(tool)
+                    }
+
+                }
+            }
 
             const newAgent = new Agent();
             newAgent.name = data.name;
@@ -25,8 +44,10 @@ export default class AgentResolver {
             newAgent.domain = data.domain;
             newAgent.instruction = data?.instruction || HelpfulInstruction;
             newAgent.welcomeMessage = data?.welcomeMessage || "";
-            newAgent.tools = data.tools;
-           
+            newAgent.tools = tools;
+            newAgent.user = user;
+
+
 
             const agentRepository = AppDataSource.getRepository(Agent);
             const savedAgent = await agentRepository.save(newAgent);
@@ -41,7 +62,7 @@ export default class AgentResolver {
             user.agents.push(savedAgent);
             await userRepository.save(user);
 
-            const agentResponse: AIAgentResponse = {
+            const agentResponse: CreateAgentResponse = {
                 id: savedAgent.id,
                 name: savedAgent.name,
                 domain: savedAgent.domain || AIAgentDomain.ASSISTANT,
@@ -57,7 +78,7 @@ export default class AgentResolver {
     }
 
 
-    @Mutation(_ => AIAgentResponse)
+    @Mutation(_ => CreateAgentResponse)
     async updateAgent(
         @Ctx() ctx: AuthorizedContext,
         @Arg("data") data: PartialAgentInput,
@@ -84,7 +105,6 @@ export default class AgentResolver {
                 ...(data.domain ? { domain: data.domain } : {}),
                 ...(data.instruction ? { instruction: data.instruction } : {}),
                 ...(data.welcomeMessage ? { welcomeMessage: data.welcomeMessage } : {}),
-                ...(data.tools ? { tools: [...data.tools] } : {})
             };
 
             await agentRepository.update(id, partialUpdates);

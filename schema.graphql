@@ -17,17 +17,6 @@ enum AIAgentDomain {
   TECHNICAL_SUPPORT
 }
 
-type AIAgentResponse {
-  description: String
-  domain: AIAgentDomain!
-  id: ID!
-  instruction: String
-  name: String!
-  sharableURL: String!
-  tools: [IntegratedTool!]
-  welcomeMessage: String
-}
-
 type Company {
   id: ID!
   industry: String!
@@ -55,29 +44,29 @@ input CreateAgentInput {
   instruction: String
   model: LLMModel! = GPT3_5
   name: String!
-  tools: [IntegratedTool!]
+  toolIds: [ID!]
+  useTemplate: Boolean!
+  welcomeMessage: String
+}
+
+type CreateAgentResponse {
+  description: String
+  domain: AIAgentDomain!
+  id: ID!
+  instruction: String
+  name: String!
+  sharableURL: String!
+  tools: [ToolResponse!]
   welcomeMessage: String
 }
 
 type CreateToolResponse {
   description: String
-  name: IntegratedTool!
-}
-
-"""The tools granting more capability to the AI agent"""
-enum IntegratedTool {
-  EmailResponder
-  EvvelandAI
-  ExtractDataFromPDF
-  IndustryResearch
-  InvoiceGeneratorAssistant
-  MarketingRep
-  MatchMaker
-  YouTubeTranscriber
+  name: ToolType!
 }
 
 """
-Language Learning Model used by the AI agent for language understanding and generation.
+Large Language Model used by the AI agent for language understanding and generation.
 """
 enum LLMModel {
   FIREWORKS
@@ -94,12 +83,12 @@ enum LLMModel {
 
 type Mutation {
   allocatePreferenceToCompany(companyId: String!, preferences: [PreferenceInput!]!): CompanyMutationResponse!
-  createAgent(data: CreateAgentInput!): AIAgentResponse!
+  createAgent(data: CreateAgentInput!): CreateAgentResponse!
   createCompany(data: PartialCompanyInput!): CompanyMutationResponse!
   createTool: CreateToolResponse!
   signInUser(data: SignInUserInput!): SignInUserResponse!
   signUp(data: SignUpUserInput!): SignUpUserResponse!
-  updateAgent(data: PartialAgentInput!, id: String!): AIAgentResponse!
+  updateAgent(data: PartialAgentInput!, id: String!): CreateAgentResponse!
 }
 
 input PartialAgentInput {
@@ -107,7 +96,7 @@ input PartialAgentInput {
   domain: AIAgentDomain
   instruction: String
   name: String
-  tools: [IntegratedTool!]
+  tools: [ToolType!]
   welcomeMessage: String
 }
 
@@ -146,6 +135,25 @@ input SignUpUserInput {
 
 type SignUpUserResponse {
   sessionToken: String!
+}
+
+type ToolResponse {
+  isTemplate: Boolean!
+  name: String!
+  type: ToolType!
+}
+
+"""The tools granting more capability to the AI agent"""
+enum ToolType {
+  EmailResponder
+  Evveland
+  ExtractDataFromPDF
+  IndustryResearch
+  InvoiceGeneratorAssistant
+  MarketingRep
+  MatchMaker
+  User
+  YouTubeTranscriber
 }
 
 type UserCompayQueryResponse {

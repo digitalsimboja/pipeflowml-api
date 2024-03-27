@@ -1,10 +1,10 @@
-import { IntegratedTool } from "../../../entities/tool";
+import { ToolType } from "../../../entities/tool";
 import { Field, InputType, ObjectType } from "type-graphql";
 
 @ObjectType()
 export class CreateToolResponse {
-    @Field(() => IntegratedTool)
-    name: IntegratedTool
+    @Field(() => ToolType)
+    name: ToolType
 
     @Field(() => String, { nullable: true })
     description?: string;
@@ -12,8 +12,8 @@ export class CreateToolResponse {
 
 @InputType()
 export class CreateToolInput {
-    @Field(() => IntegratedTool)
-    name: IntegratedTool
+    @Field(() => ToolType)
+    name: ToolType
 
     @Field(() => String, { nullable: true })
     description?: string;
